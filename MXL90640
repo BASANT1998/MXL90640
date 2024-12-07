@@ -1,0 +1,64 @@
+import smbus2
+import numpy as np
+import time
+
+# MLX90640 Constants and Parameters
+MLX90640_ADDRESS = 0x5A  # MLX90640 I2C address
+NUM_PIXELS = 768  # 24x32 pixel array for MLX90640
+
+# Initialize I2C bus
+bus = smbus2.SMBus(1)
+
+# Function to check if MLX90640 is connected
+def is_connected(address):
+    try:
+        bus.write_byte(address, 0)  # Send a byte to check connectivity
+        return True
+    except:
+        return False
+
+# Function to read MLX90640 frame data (simulated here for demonstration)
+def get_frame_data(address):
+    # In an actual implementation, replace this with an I2C read command for the MLX90640 fr>
+    # The MLX90640 frame data would contain temperature values for each pixel in the 24x32 a>
+    # Here we generate random data for simulation
+    return np.random.random(NUM_PIXELS) * 50  # Random temperature data for each pixel
+
+# Function to convert frame data to temperature values (Celsius)
+def mlx90640_to_temp(frame_data):
+    # Simulate temperature conversion (real conversion depends on sensor calibration data)
+    return frame_data - 10  # Just an example adjustment to simulate temperature (you can re>
+
+# Function to display the temperature grid
+def display_temperature(temperature_data):
+    # Reshape the data into a 24x32 grid (typical resolution for MLX90640)
+    temp_grid = temperature_data.reshape(24, 32)
+
+    # Print out the temperature grid for now
+    print("Temperature Grid (°C):")
+    for row in temp_grid:
+        print(" ".join([f"{temp:6.2f}" for temp in row]))
+
+# Main loop
+def main():
+    if not is_connected(MLX90640_ADDRESS):
+        print("MLX90640 not detected at the I2C address 0x5A.")
+        return
+        return
+
+    print("MLX90640 detected.")
+
+    # Simulate reading frame data
+    frame_data = get_frame_data(MLX90640_ADDRESS)
+
+    # Convert frame data to temperature (in Celsius)
+    temperatures = mlx90640_to_temp(frame_data)
+
+    # Display the temperature grid
+    display_temperature(temperatures)
+
+if __name__ == "__main__":
+    while True:
+        main()
+        time.sleep(1)  # Delay to simulate reading at regular intervals
+
